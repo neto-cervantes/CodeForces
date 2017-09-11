@@ -34,7 +34,6 @@ int main() {
     for (int i = 0; i < 26; i++)
       if(lista[i] != '\0' && lista[i] != 'a' + i)
         cambios[(char) 'a' + i] = lista[i];
-    cout << cambios.size() << endl;
     for (busca = cambios.begin(); busca != cambios.end(); busca++)
       cambios.erase(busca->second);
     cout << cambios.size() << endl;
