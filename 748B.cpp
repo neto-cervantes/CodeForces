@@ -4,43 +4,42 @@
 
 using namespace std;
 
-map<char, char> lista;
-map<char, char>::iterator busca;
-
-char buscar(char c) {
-  for (busca = lista.begin(); busca != lista.end(); busca++) {
-    if(busca->first == c)
-      return busca->second;
-    if(busca->second == c)
-      return busca->first;
-  }
-  return '.';
-}
-
 int main() {
   string alfa, bravo;
   cin >> alfa >> bravo;
+  char lista[26] = "";
   bool bueno = true;
 
   for (size_t i = 0; i < alfa.length() && bueno; i++) {
-    char x = buscar(alfa[i]);
-    char y = buscar(bravo[i]);
-    if(alfa[i] != bravo[i]) {
-      if(x == '.' && y == '.') {
-        lista[alfa[i]] = bravo[i];
+    char *x = &lista[alfa[i] - 'a'];
+    char *y = &lista[bravo[i]  - 'a'];
+    if(*x == '\0' && *y == '\0') {
+      if(alfa[i] == bravo[i])
+        *x = *y = alfa[i];
+      else {
+        *x = bravo[i];
+        *y = alfa[i];
       }
-      else if (alfa[i] != y || bravo[i] != x)
-        bueno = false;
-    } else if(x == '.' && y == '.')
+    } else if(*x == '\0' || *y == '\0')
+      bueno = false;
+    else if(*x == bravo[i] && *y == alfa[i])
       continue;
-    else if(alfa[i] != y || bravo[i] != x)
+    else
       bueno = false;
   }
+
   if(bueno) {
-    cout << lista.size() << endl;
-    for (busca = lista.begin(); busca != lista.end(); busca++) {
+    map<char, char> cambios;
+    map<char, char>::iterator busca;
+    for (int i = 0; i < 26; i++)
+      if(lista[i] != '\0' && lista[i] != 'a' + i)
+        cambios[(char) 'a' + i] = lista[i];
+    cout << cambios.size() << endl;
+    for (busca = cambios.begin(); busca != cambios.end(); busca++)
+      cambios.erase(busca->second);
+    cout << cambios.size() << endl;
+    for (busca = cambios.begin(); busca != cambios.end(); busca++)
       cout << busca->first << ' ' <<  busca->second << endl;
-    }
   } else
     cout << "-1" << endl;
 }
